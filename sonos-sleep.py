@@ -21,8 +21,12 @@ args = parser.parse_args()
 device = soco.discovery.by_name(args.name)
 
 if not device:
+    try:
+        available = [device.player_name for device in soco.discover()]
+    except TypeError:
+        print("No devices found on local network.")
+        exit(1)
     print("No device called '{}'".format(args.name))
-    available = [device.player_name for device in soco.discover()]
     print("Available devices: {}".format(", ".join(available)))
     exit(1)
 
